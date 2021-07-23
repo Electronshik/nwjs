@@ -1,0 +1,134 @@
+body {
+	//background-color: #b3e5fc;
+}
+
+.exit-menu {
+	border-left: 2px solid #ddd;
+}
+
+.container {
+	width: 90% !important;
+}
+
+nav .select-wrapper {
+	padding-top: 8px;
+}
+
+nav .select-wrapper > .select-dropdown {
+	color: #fff !important;
+	z-index: 2 !important;
+}
+
+nav .select-wrapper > ul > li:not(.disabled) > span{
+	//border: 1px solid red !important;
+	color: #333 !important;
+}
+
+nav .select-wrapper > .caret {
+	margin-top: 20px !important;
+	z-index: 1 !important;
+	fill: #fff !important;
+}
+
+.nav-wrapper .active {
+	background-color: #26a69a;
+}
+
+button.command {
+	padding-left: 0;
+	padding-right: 5px;
+	text-align: left;
+	text-indent: -0.75em;
+}
+
+.material-icons {
+	width: 18%;
+	text-align: right;
+	margin: 0;
+}
+
+.command {
+	margin-bottom: 6px;
+	width: 100%;
+}
+
+#sended, #received {
+	height: 455px;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+
+.actual_sended {
+	color: #388e3c;
+}
+
+.actual_received {
+	color: #3d5afe;
+}
+
+.contr-num {
+	font-size: 0.95em;
+	color: #9e9e9e;
+}
+
+.ip_check[type="checkbox"].filled-in:checked+span:not(.lever):after {
+	border: 2px solid #00acc1;
+	background-color: #00acc1;
+}
+
+.switch.custom-lever label input[type=checkbox]:checked+.lever {
+   background-color: #00acc1;
+}
+.switch.custom-lever label input[type=checkbox]:checked+.lever:after {
+   background-color: #4dd0e1;
+}
+/* vertical align for ip addr checkboxes */
+.input-field > .s5 {
+	margin-top: 27px;
+}
+
+.ip_settings[type="radio"].with-gap:checked+span:not(.lever):after {
+	border: 2px solid #00acc1;
+	background-color: #00acc1;
+}
+
+.settings-field p {
+	height: 24px;
+	margin: 0;
+}
+
+.settings-field .input-field {
+	height: 24px;
+	margin: 0;
+}
+
+.settings-field .input-field select {
+	font-size: 0.95em;
+	height: 24px;
+	padding: 0;
+	margin: 0;
+}
+
+.settings-field div.input-field input {
+	font-size: 0.95em;
+	height: 24px;
+	padding: 0;
+	margin: 0;
+}
+
+.buttons label {
+	margin-top: 8px;
+}
+
+.buttons .input-field {
+	padding-top: 0;
+	margin-top: 10px;
+	margin-bottom: 0;
+}
+
+.received-log {
+	height: 425px;
+	overflow-x: hidden;
+	overflow-y: auto;
+	font-size: 0.8em;
+}

@@ -1,0 +1,119 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+	    <title>Controllers</title>
+	    <link rel="stylesheet" href="style.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+	</head>
+	<body>
+			<script type="text/javascript">
+				var ip_addr_array = ['192.168.1.10', '192.168.1.11', '192.168.1.12', '192.168.1.13'];
+			</script>
+	<div class="row">
+		<nav>
+			<div class="input-field col s3">
+				<select class="controller-choose" id="controller-choose">
+					<option value="" disabled>Выберите контроллер</option>
+					<option value="1" selected>Модули</option>
+					<option value="2">Общий контроллер</option>
+				</select>
+			</div>
+
+			<div class="nav-wrapper teal lighten-2">
+				<ul id="nav-mobile" class="right hide-on-med-and-down">
+					<li><a href="index.html" class="active">Управление</a></li>
+					<li><a href="settings.html">Настройки</a></li>
+					<li><a href="index.html">Тесты</a></li>
+					<li><a href="log.html">Консоль</a></li>
+					<li><a href="#" onclick="window.close();" class="exit-menu">Выход</a></li>
+				</ul>
+			</div>
+		</nav>
+	</div>
+
+	<div class="container">
+		<div class="row"></div>
+		<div class="row">
+		    <div class="col s3 buttons">
+		    	<div class="row"></div>
+				<button class="waves-effect cyan darken-1 btn-small command" onclick="sendTcpReq ('xxx');"><i class="material-icons left">autorenew</i>xxx - Get state</button>
+				<button class="waves-effect cyan darken-1 btn-small command" onclick="sendTcpReq ('xxx');"><i class="material-icons left">airplanemode_active</i>xxx - Open</button>
+				<button class="waves-effect cyan darken-1 btn-small command" onclick="sendTcpReq ('xxx');"><i class="material-icons left">airplanemode_inactive</i>xxx - Close</button>
+				<button class="waves-effect cyan darken-1 btn-small command" onclick="sendTcpReq ('xxx');"><i class="material-icons left">block</i>xxx - Stop</button>
+				<button class="waves-effect cyan darken-1 btn-small command" onclick="sendTcpReq ('xxx');"><i class="material-icons left">highlight</i>xxx - On</button>
+				<button class="waves-effect cyan darken-1 btn-small command" onclick="sendTcpReq ('xxx');"><i class="material-icons left">highlight_off</i>xxx - Off</button>
+				<button class="waves-effect cyan darken-1 btn-small command" onclick="sendTcpReq ('xxx');"><i class="material-icons left">highlight</i>xxx - On</button>
+				<button class="waves-effect cyan darken-1 btn-small command" onclick="sendTcpReq ('xxx');"><i class="material-icons left">highlight_off</i>xxx - Off</button>
+				<button class="waves-effect cyan darken-1 btn-small command" onclick="sendTcpReq ('xxx');"><i class="material-icons left">build</i>xxx - Cal</button>
+				<button class="waves-effect cyan darken-1 btn-small command" onclick="sendTcpReq ('xxx');"><i class="material-icons left">restore_page</i>xxx - Reboot</button>
+				<button class="waves-effect cyan darken-1 btn-small command" onclick="sendTcpReq ('xxx');"><i class="material-icons left">camera</i>xxx - Get</button>
+
+			</div>
+			<div class="input-field col s4">
+				<script type="text/javascript">
+					ip_addr_array.map((ip_addr, i) => {
+						i++;
+						document.write('\
+							<div class="input-field col s12"> \
+								<input value="' + ip_addr + '" id="ip_'+i+'" type="text" class="col s7"> \
+								<label class="active" for="ip_'+i+'">Контроллер '+i+'</label> \
+								<label class="col s5"> \
+								<label class="col s5"> \
+									<input type="checkbox" class="filled-in ip_check lime" id="'+i+'" ');
+									if (i == 1)	{document.write('checked="checked"');}
+									document.write('/><span>ON</span> \
+								</div>');
+					});
+				</script>
+
+				<div class="switch col s12 custom-lever">
+					<div class="col s4"></div>
+					<label class="col s8">
+						<input type="checkbox" id="all_ip" onclick="setAllIp(this);">
+						<span class="lever"></span>All ON
+					</label>
+				</div>
+				<p>&nbsp</p>
+				<div class="input-field col s10">
+					<input value="xxx" id="custom_tcp" type="text" class="col s12">
+					<label class="active" for="ip_2">Отправить команду</label>
+					<button class="waves-effect cyan darken-1 btn-small command col s12" onclick="sendCustomTcpReq ();"><i class="material-icons left">email</i>Send custom</button>
+				</div>
+
+			</div>
+			<div class="col s2">
+				<p><b>Sended:</b></p>
+				<p id="sended">
+				</p>
+			</div>
+			<div class="col s3">
+				<p><b>Received:</b></p>
+				<p id="received">
+				</p>
+			</div>
+		</div>
+	</div>
+	<script src="tcp_request.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$('select').formSelect();
+		});
+		document.addEventListener('DOMContentLoaded', function() {
+				var contr_select = document.getElementById('controller-choose');
+				var pageState = contr_select.value;
+				contr_select.addEventListener('change', (event) => {
+					if (contr_select.value != pageState)
+					{
+						pageState = contr_select.value;
+						location.href = 'main.html';
+					}
+			});
+		});
+
+	</script>
+</body>
+</html>

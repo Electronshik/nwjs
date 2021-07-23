@@ -1,0 +1,217 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+	    <title>Controllers</title>
+	    <link rel="stylesheet" href="style.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+	</head>
+	<body>
+
+	<div class="row">
+		<nav>
+			<div class="input-field col s3">
+				<select class="controller-choose" id="controller-choose">
+					<option value="" disabled>Выберите контроллер</option>
+					<option value="1">Модули</option>
+					<option value="2" selected>Общий контроллер</option>
+				</select>
+			</div>
+
+			<div class="nav-wrapper teal lighten-2">
+				<ul id="nav-mobile" class="right hide-on-med-and-down">
+					<li><a href="main.html">Управление</a></li>
+					<li><a href="main-settings.html" class="active">Настройки</a></li>
+					<li><a href="index.html">Тесты</a></li>
+					<li><a href="log.html">Консоль</a></li>
+					<li><a href="#" onclick="window.close();" class="exit-menu">Выход</a></li>
+				</ul>
+			</div>
+		</nav>
+	</div>
+
+	<div class="container">
+		<div class="row"></div>
+		<div class="row">
+		    <div class="col s3 buttons">
+
+				<div class="input-field col s12">
+					<input value="192.168.1.21" id="ip_1" type="text" class="col s7">
+					<label class="active" for="ip_1">Контроллер 1</label>
+					<label class="col s5">
+						<input class="with-gap ip_settings" name="ip_settings" type="radio" id="1" checked />
+						<span>ON</span>
+					</label>
+				</div>
+
+				<div class="input-field col s12">
+					<input value="192.168.1.22" id="ip_4" type="text" class="col s7">
+					<label class="active" for="ip_4">Контроллер 2</label>
+					<label class="col s5">
+						<input class="with-gap ip_settings" name="ip_settings" type="radio" id="2" />
+						<span>ON</span>
+					</label>
+				</div>
+
+		    	<div class="row"></div>
+				<button class="waves-effect cyan darken-1 btn-small command" onclick="sendTcpReq ('xxx');"><i class="material-icons left">autorenew</i>xxx - Get settings</button>
+				<button class="waves-effect cyan darken-1 btn-small command" onclick="sendTcpReq ('xxx');"><i class="material-icons left">airplanemode_active</i>xxx - Open</button>
+				<button class="waves-effect cyan darken-1 btn-small command" onclick="sendTcpReq ('xxx');"><i class="material-icons left">airplanemode_inactive</i>xxx - Close</button>
+				<button class="waves-effect cyan darken-1 btn-small command" onclick="sendTcpReq ('xxx');"><i class="material-icons left">block</i>xxx - Stop</button>
+				<button class="waves-effect cyan darken-1 btn-small command" onclick="sendTcpReq ('xxx');"><i class="material-icons left">highlight</i>xxx - On</button>
+				<button class="waves-effect cyan darken-1 btn-small command" onclick="sendTcpReq ('xxx');"><i class="material-icons left">highlight_off</i>xxx - Off</button>
+				<button class="waves-effect cyan darken-1 btn-small command" onclick="sendTcpReq ('xxx');"><i class="material-icons left">highlight</i>xxx - On</button>
+
+			</div>
+			<div class="input-field col s4 settings-field">
+				<p class="col s6">Setting 1: </p>
+				<div class="input-field col s6"><select class="browser-default" id="Setting_1">
+						<option value="0">FALSE</option><option value="1">TRUE</option></select></div>
+				<p class="col s6">Setting 2: </p>
+				<div class="input-field col s6"><select class="browser-default" id="Setting_2">
+						<option value="0">FALSE</option><option value="1">TRUE</option></select></div>
+				<p class="col s6">Setting 3: </p><div class="input-field col s6"><input placeholder="n/a" type="text" disabled id="Setting_3"></div>
+				<p class="col s6">Setting 4: </p><div class="input-field col s6"><input placeholder="n/a" type="text" disabled id="Setting_4"></div>
+				<p class="col s6">Setting 5: </p><div class="input-field col s6"><input placeholder="n/a" type="text" disabled id="Setting_5"></div>
+				<p class="col s6">Setting 6: </p><div class="input-field col s6"><input placeholder="n/a" type="text" disabled id="Setting_6"></div>
+				<p class="col s6">Setting 7: </p><div class="input-field col s6"><input placeholder="n/a" type="text" disabled id="Setting_7"></div>
+				<p class="col s6">Setting 8: </p><div class="input-field col s6"><input placeholder="n/a" type="text" id="Setting_8"></div>
+			</div>
+			<div class="col s1">
+				<p><b>Received:</b></p>
+				<p id="received">
+				</p>
+			</div>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$('select').formSelect();
+		});
+		document.addEventListener('DOMContentLoaded', function() {
+				var contr_select = document.getElementById('controller-choose');
+				var pageState = contr_select.value;
+				contr_select.addEventListener('change', (event) => {
+					if (contr_select.value != pageState)
+					{
+						pageState = contr_select.value;
+						location.href = 'settings.html';
+					}
+			});
+		});
+
+	function updateSettingsFields (settingsBuffer)
+	{
+		console.log(settingsBuffer);
+		document.getElementById('Setting_1').value = settingsBuffer[1];
+		document.getElementById('Setting_2').value = settingsBuffer[2];
+		document.getElementById('Setting_3').value = settingsBuffer[3];
+		document.getElementById('Setting_4').value = settingsBuffer[4];
+		document.getElementById('Setting_5').value = settingsBuffer[5];
+		document.getElementById('Setting_6').value = settingsBuffer[6];
+		document.getElementById('Setting_7').value = settingsBuffer[7];
+		document.getElementById('Setting_8').value = new DataView(settingsBuffer.buffer, 8, 2).getUint16(0, true);
+
+	} //https://stackoverflow.com/questions/15761790/convert-a-32bit-integer-into-4-bytes-of-data-in-javascript
+
+	async function sendTcpReq (command)
+	{
+		var controllers = document.getElementsByClassName('ip_settings');
+		for (var i = 0; i < controllers.length; i++)
+		{
+			if (controllers[i].checked)
+			{
+				var num = i + 1;
+				var was_connected = false, conn_closed = false;
+				var ip_addr = document.getElementById('ip_' + controllers[i].id);
+				var net = require('net');
+				var client = new net.Socket();
+				client.connect ( {port:8080, host:ip_addr.value} );
+
+				client.on('error', (e) => {
+					console.log('Error!');
+				});
+
+				client.setTimeout(1000, (e) => {
+					if (was_connected)
+					{
+						addStringToField('received', 'n/a', num);
+					}
+					else
+					{
+						addStringToField('sended', 'not conn', num);
+						addStringToField('received', 'n/a', num);
+					}
+					client.destroy();
+				});
+
+				client.on('connect',function()
+				{
+					was_connected = true;
+					console.log('Sended: ' + command);
+					//addStringToField('sended', command, num);
+					client.write(command);
+				});
+
+				client.on('data', function(data)
+				{
+					//console.log(data.length + " : " + Object.values(data)); //JSON.stringify(data.Buffer));
+					let buffer = new Uint8Array(data);
+					//for (var i = 0; i < data.length; i++){  
+					    //buffer[i] = data[i];
+					//}
+					//let dataView = new DataView(Object.values(data));
+					updateSettingsFields(buffer);
+
+					var str = data + '\n';
+					str = str.replace('*', '');
+					addStringToField('received', str, num);
+					client.destroy();
+				});
+
+				client.on('close', function()
+				{
+					console.log('Connection closed');
+					conn_closed = true;
+				});
+
+				while (!conn_closed)
+				{
+					await sleep (100);
+				}
+			}
+		}
+	}
+
+	function addStringToField (id, string, num)
+	{
+		//resetColorForClass('actual_' + id);
+		var stringField = document.getElementById(id);
+		stringField.innerHTML += "<span class='contr-num'>" + num + ": </span><span class='actual_" + id + "'>" + string + "</span><br>";
+		setTimeout(function request() {
+			resetColorForClass('actual_' + id);
+		}, 750);
+		stringField.scrollTop = stringField.scrollHeight;
+	}
+
+	function resetColorForClass (className)
+	{
+		var actual = document.getElementsByClassName(className);
+		for (var i = 0; i < actual.length; i++)
+		{
+			actual[i].style.color="black";
+		}
+	}
+	
+	function sleep(ms)
+	{
+		return new Promise(resolve => setTimeout(resolve, ms));
+	}
+
+	</script>
+</body>
+</html>

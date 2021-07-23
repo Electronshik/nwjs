@@ -1,0 +1,211 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+	    <title>Controllers</title>
+	    <link rel="stylesheet" href="style.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+	</head>
+	<body>
+
+	<div class="row">
+		<nav>
+			<div class="input-field col s3">
+				<select class="controller-choose" id="controller-choose">
+					<option value="" disabled>Выберите контроллер</option>
+					<option value="1" selected>Модули</option>
+					<option value="2">Общий контроллер</option>
+				</select>
+			</div>
+
+			<div class="nav-wrapper teal lighten-2">
+				<ul id="nav-mobile" class="right hide-on-med-and-down">
+					<li><a href="index.html">Управление</a></li>
+					<li><a href="settings.html">Настройки</a></li>
+					<li><a href="index.html">Тесты</a></li>
+					<li><a href="log.html" class="active">Консоль</a></li>
+					<li><a href="#" onclick="window.close();" class="exit-menu">Выход</a></li>
+				</ul>
+			</div>
+		</nav>
+	</div>
+
+	<div class="container">
+		<div class="row"></div>
+		<div class="row">
+			<div class="col s3">
+				<div class="input-field col s12">
+					<input value="192.168.1.10" id="ip_1" type="text" class="col s7">
+					<label class="active" for="ip_1">Контроллер 1</label>
+					<label class="col s5">
+						<input type="checkbox" class="filled-in ip_check" id="1" onchange="openLogs(this);" />
+						<span>ON</span>
+					</label>
+				</div>
+				<p><b>Received:</b></p>
+				<p class ="received-log" id="received_1"></p>
+			</div>
+
+			<div class="col s3">
+				<div class="input-field col s12">
+					<input value="192.168.1.11" id="ip_2" type="text" class="col s7">
+					<label class="active" for="ip_2">Контроллер 2</label>
+					<label class="col s5">
+						<input type="checkbox" class="filled-in ip_check" id="2" onchange="openLogs(this);" />
+						<span>ON</span>
+					</label>
+				</div>
+				<p><b>Received:</b></p>
+				<p class ="received-log" id="received_2"></p>
+			</div>
+
+			<div class="col s3">
+				<div class="input-field col s12">
+					<input value="192.168.1.12" id="ip_3" type="text" class="col s7">
+					<label class="active" for="ip_3">Контроллер 3</label>
+					<label class="col s5">
+						<input type="checkbox" class="filled-in ip_check" id="3" onchange="openLogs(this);" />
+						<span>ON</span>
+					</label>
+				</div>
+				<p><b>Received:</b></p>
+				<p class ="received-log" id="received_3"></p>
+			</div>
+
+			<div class="col s3">
+				<div class="input-field col s12">
+					<input value="192.168.1.13" id="ip_4" type="text" class="col s7">
+					<label class="active" for="ip_4">Контроллер 4</label>
+					<label class="col s5">
+						<input type="checkbox" class="filled-in ip_check" id="4" onchange="openLogs(this);" />
+						<span>ON</span>
+					</label>
+				</div>
+				<p><b>Received:</b></p>
+				<p class ="received-log" id="received_4"></p>
+			</div>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		var logUnchecked = [false, false, false, false];
+		$(document).ready(function() {
+			$('select').formSelect();
+		});
+		document.addEventListener('DOMContentLoaded', function() {
+				var contr_select = document.getElementById('controller-choose');
+				var pageState = contr_select.value;
+				contr_select.addEventListener('change', (event) => {
+					if (contr_select.value != pageState)
+					{
+						pageState = contr_select.value;
+						location.href = 'main.html';
+					}
+			});
+		});
+
+	function openLogs (objCheckbox)
+	{
+		var ip_addr = document.getElementById('ip_' + objCheckbox.id);
+		if (objCheckbox.checked)
+		{
+			console.log(ip_addr.value);
+			logUnchecked[objCheckbox.id] = false;
+			sendTcpLogReq (objCheckbox.id);
+		}
+		else
+		{
+			logUnchecked[objCheckbox.id] = true;
+		}
+	}
+
+	async function sendTcpLogReq (num)
+	{
+		var command = 'xxx';
+				var was_connected = false, conn_closed = false;
+				var ip_addr = document.getElementById('ip_' + num);
+				var net = require('net');
+				var client = new net.Socket();
+				client.connect ( {port:8080, host:ip_addr.value} );
+
+				client.on('error', (e) => {
+					console.log('Error!');
+				});
+
+				client.setTimeout(1000, (e) => {
+					if (!was_connected)
+					{
+						//addStringToField('sended', 'not conn', num);
+						addStringToField('received_' + num, 'n/a', num);
+						client.destroy();
+					}
+					if (logUnchecked[num])
+					{
+						client.destroy();
+					}
+				});
+
+				client.on('connect',function()
+				{
+					was_connected = true;
+					console.log('Sended: ' + command);
+					//addStringToField('sended', command, num);
+					client.write(command);
+				});
+
+				client.on('data', function(data)
+				{
+					//console.log('Received: ' + data);
+					var str = data + '\n';
+					str = str.replace('*', '');
+					addStringToField('received_' + num, str, num);
+					//client.destroy();
+					if (logUnchecked[num])
+					{
+						client.destroy();
+					}
+				});
+
+				client.on('close', function()
+				{
+					console.log('Connection closed');
+					conn_closed = true;
+				});
+
+				while (!conn_closed)
+				{
+					await sleep (100);
+				}
+	}
+
+	function addStringToField (id, string, num)
+	{
+		//resetColorForClass('actual_' + id);
+		var stringField = document.getElementById(id);
+		stringField.innerHTML += "<span class='contr-num'>" + num + ": </span><span class='actual_received'>" + string + "</span><br>";
+		setTimeout(function request() {
+			resetColorForClass('actual_received');
+		}, 750);
+		stringField.scrollTop = stringField.scrollHeight;
+	}
+
+	function resetColorForClass (className)
+	{
+		var actual = document.getElementsByClassName(className);
+		for (var i = 0; i < actual.length; i++)
+		{
+			actual[i].style.color="black";
+		}
+	}
+	
+	function sleep(ms)
+	{
+		return new Promise(resolve => setTimeout(resolve, ms));
+	}
+
+	</script>
+</body>
+</html>
